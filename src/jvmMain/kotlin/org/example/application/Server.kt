@@ -17,6 +17,18 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.io.File
 
+fun HTML.index() {
+    head {
+        script(src = "/static/script.js") {}
+    }
+    body {
+        button {
+            onClick = "saveCustomer()"
+            + "Make a CORS request to save a customer"
+        }
+    }
+}
+
 fun main() {
     val env = applicationEngineEnvironment {
         module {
@@ -39,17 +51,7 @@ fun Application.frontend() {
     routing {
         port(3000) {
             get("/") {
-                call.respondHtml {
-                    head {
-                        script(src = "/static/script.js") {}
-                    }
-                    body {
-                        button {
-                            onClick = "saveCustomer()"
-                            + "Make a CORS request to save a customer"
-                        }
-                    }
-                }
+                call.respondHtml(HttpStatusCode.OK, HTML::index)
             }
             static("/static") {
                 staticRootFolder = File("assets")
