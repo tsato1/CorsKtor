@@ -1,4 +1,4 @@
-package org.example.application
+package org.example
 
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
@@ -13,19 +13,23 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.html.*
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.io.File
 
 fun HTML.index() {
     head {
-        script(src = "/static/script.js") {}
+        meta {
+            charset = "UTF-8"
+        }
+        title {
+            +"Cors Test"
+        }
     }
     body {
-        button {
-            onClick = "saveCustomer()"
-            + "Make a CORS request to save a customer"
+        div {
+            id = "root"
         }
+        script(src = "/static/Cors.js") {}
     }
 }
 
@@ -56,13 +60,11 @@ fun Application.frontend() {
             static("/static") {
                 staticRootFolder = File("assets")
                 files("js")
+                resources()
             }
         }
     }
 }
-
-@Serializable
-data class Customer(val id: Int, val firstName: String, val lastName: String)
 
 fun Application.backend() {
     val customerStorage = mutableListOf<Customer>()
