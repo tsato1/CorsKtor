@@ -13,11 +13,21 @@ val jsonClient = HttpClient {
     }
 }
 
+suspend fun getCustomer(id: String): HttpResponse {
+    return jsonClient.get("http://0.0.0.0:9090/customer/$id") {
+        header(HttpHeaders.Accept, ContentType.Application.OctetStream.toString())
+    }
+}
+
 suspend fun saveCustomer(): HttpResponse {
-    val response = jsonClient.post("http://0.0.0.0:8080/customer") {
-        header(HttpHeaders.Accept, "application/json")
+    return jsonClient.post("http://0.0.0.0:9090/customer") {
         header(HttpHeaders.ContentType, "application/json")
         setBody(Customer(id = 3, firstName = "Jet", lastName = "Brains"))
     }
-    return response
+}
+
+suspend fun getCustomers(): HttpResponse {
+    return jsonClient.get("http://0.0.0.0:9090/customers") {
+        header(HttpHeaders.Accept, ContentType.Application.OctetStream.toString())
+    }
 }
